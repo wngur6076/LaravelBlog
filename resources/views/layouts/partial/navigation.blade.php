@@ -12,7 +12,7 @@
             </button>
 
             <!-- Branding Image -->
-            <a class="navbar-brand" href="{{ url('/') }}">
+            <a class="navbar-brand" href="{{ url('/home') }}">
                 {{ config('app.name', 'Laravel') }}
             </a>
         </div>
@@ -27,8 +27,8 @@
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 @if(Auth::guest())
-                    <li><a href="{{ url('/login') }}">Login</a></li>
-                    <li><a href="{{ url('/register') }}">Register</a></li>
+                    <li><a href="{{ route('sessions.create') }}">Login</a></li>
+                    <li><a href="{{ route('users.create') }}">Register</a></li>
                 @else
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
@@ -38,14 +38,13 @@
 
                         <ul class="dropdown-menu" role="menu">
                             <li>
-                                <a href="{{ url('/logout') }}" onclick="event.preventDefault();
+                                <a href="{{ route('sessions.destroy') }}" onclick="event.preventDefault();
                                             document.getElementById('logout-form').submit();">
                                     Logout
                                 </a>
 
-                                <form id="logout-form" action="{{ url('/logout') }}"
-                                    method="POST" style="display: none;">
-                                    {{ csrf_field() }}
+                                <form id="logout-form" action="{{ route('sessions.destroy') }}"
+                                    method="GET" style="display: none;">
                                 </form>
                             </li>
                         </ul>

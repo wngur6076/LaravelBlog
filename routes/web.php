@@ -15,7 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home', [
+    'as' => 'home',
+    'uses' => 'HomeController@index',
+]);
+
 /* 사용자 가입 */
 Route::get('auth/register', [
     'as' => 'users.create',
@@ -56,7 +60,7 @@ Route::post('auth/remind', [
 Route::get('auth/reset/{token}', [
     'as' => 'reset.create',
     'uses' => 'PasswordsController@getReset'
-]);
+])->where('token', '[a-zA-Z0-9]{64}');
 Route::post('auth/reset', [
     'as' => 'reset.store',
     'uses' => 'PasswordsController@postReset'
