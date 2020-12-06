@@ -9,12 +9,15 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    protected $dates = ['last_login'];
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
+        'confirm_code', 'activated',
         'name', 'email', 'password',
     ];
 
@@ -24,6 +27,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'confirm_code', 'password', 'remember_token',
     ];
+
+    protected $casts = ['activated' => 'boolean',];
 }

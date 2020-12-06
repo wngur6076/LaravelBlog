@@ -7,6 +7,9 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 
 class EventServiceProvider extends ServiceProvider
 {
+    protected $subscribe = [
+        \App\Listeners\UsersEventListener::class
+    ];
     /**
      * The event listener mappings for the application.
      *
@@ -15,6 +18,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         'App\Events\SomeEvent' => [
             'App\Listeners\EventListener',
+        ],
+        \Illuminate\Auth\Events\Login::class => [
+            \App\Listeners\UsersEventListener::class
         ],
     ];
 
