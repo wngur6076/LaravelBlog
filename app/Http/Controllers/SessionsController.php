@@ -39,6 +39,14 @@ class SessionsController extends Controller
         return redirect()->intended('home');
     }
 
+    public function destroy()
+    {
+        auth()->logout();
+        flash('또 방문해 주세요.');
+
+        return redirect('/');
+    }
+
     protected function respondError($message)
     {
         flash()->error($message);
