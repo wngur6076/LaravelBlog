@@ -37,14 +37,17 @@ class ArticlesController extends Controller
         return view('articles.show', compact('article'));
     }
 
-    public function edit($id)
+    public function edit(\App\Article $article)
     {
-        return __METHOD__ . '은 다음 기본 키를 가진 아타클 모델을 수정하기 위한 폼을 담는 뷰를 반환합니다.' . $id;
+        return view('articles.edit', compact('article'));
     }
 
-    public function update(Request $request, $id)
+    public function update(\App\Http\Requests\ArticlesRequest $request, \App\Article $article)
     {
-        return __METHOD__ . '은 다음 사용자 폼 데이터로 다음 기본키를 가진 아티클 모델을 수정합니다.' . $id;
+        $article->update($request->all());
+        flash()->success('수정하신 내용을 저장했습니다.');
+
+        return redirect(route('articles.show', $article->id));
     }
     
     public function destroy($id)
