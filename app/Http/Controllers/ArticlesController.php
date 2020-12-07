@@ -50,8 +50,10 @@ class ArticlesController extends Controller
         return redirect(route('articles.show', $article->id));
     }
     
-    public function destroy($id)
+    public function destroy(\App\Article $article)
     {
-        return __METHOD__ . '삭제합니다' . $id;
+        $article->delete();
+
+        return response()->json([], 204);
     }
 }
