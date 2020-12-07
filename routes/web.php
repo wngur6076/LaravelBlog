@@ -17,7 +17,13 @@ Route::get('/', function () {
 
 Route::get('/home', [
     'as' => 'home',
-    'uses' => 'HomeController@index',
+    'uses' => 'HomeController@index'
+]);
+
+/* 소셜 로그인 */
+Route::get('social/{provider}', [
+    'as' => 'social.login',
+    'uses' => 'SocialController@execute'
 ]);
 
 /* 사용자 가입 */

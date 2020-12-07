@@ -4,6 +4,22 @@
 <form action="{{ route('sessions.store') }}" method="POST" class="form__auth">
     {!! csrf_field() !!}
 
+    <div class="page-header" style="text-align: center">
+        <h4>로그인</h4>
+        <p class="text-muted">
+            구글 계정으로 로그인하세요. {{ config('app.name') }} 계정으로 로그인할 수도 있습니다.
+        </p>
+    </div>
+
+    <div class="form-group">
+        <a class="btn btn-default btn-lg btn-block"
+            href="{{ route('social.login', ['google']) }}">
+            <strong>
+                <i class="fa fa-google"></i>
+                google 계정으로 로그인하기
+            </strong>
+        </a>
+    </div>
 
     <div
         class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
