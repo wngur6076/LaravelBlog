@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+
     public function index()
     {
         $articles = \App\Article::latest()->paginate(3);
@@ -17,19 +22,24 @@ class ArticlesController extends Controller
 
     public function create()
     {
-        return view('articles.create');
+        $article = new \App\Article;
+
+        return view('articles.create', compact('article'));
     }
 
     public function store(\App\Http\Requests\ArticlesRequest $request)
     {
-        $article = \App\User::find(1)->articles()->create($request->all());
+        $article = $request->user()->articles()->create($request->all());
         if (! $article) {
-            return back()->with('flash_message', '글이 저장되지 않았습니다.')
-                ->withInput();
+            flash()->error(
+                trans('글이 저장되지 않았습니다.')
+            );
+
+            return back()->withInput();
         }
         // event(new \App\Events\ArticleEvent($article));
         
-        return redirect(route('articles.index'))->with('flash_message', '작성하신 글이 저장되었습니다.');
+        return $this->respondCreated($article);
     }
 
     public function show(\App\Article $article)
@@ -39,6 +49,7 @@ class ArticlesController extends Controller
 
     public function edit(\App\Article $article)
     {
+        $this->authorize('update', $article);
         return view('articles.edit', compact('article'));
     }
 
@@ -52,8 +63,19 @@ class ArticlesController extends Controller
     
     public function destroy(\App\Article $article)
     {
+        $this->authorize('delete', $article);
+
         $article->delete();
 
         return response()->json([], 204);
+    }
+
+    protected function respondCreated($article)
+    {
+        flash()->success(
+            trans('작성하신 글이 저장되었습니다.')
+        );
+
+        return redirect(route('articles.show', $article->id));
     }
 }
