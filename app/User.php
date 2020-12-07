@@ -31,4 +31,9 @@ class User extends Authenticatable
     ];
 
     protected $casts = ['activated' => 'boolean',];
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
 }

@@ -20,6 +20,9 @@ Route::get('/home', [
     'uses' => 'HomeController@index'
 ]);
 
+/* 글쓰기 */
+Route::resource('articles', 'ArticlesController');
+
 /* 소셜 로그인 */
 Route::get('social/{provider}', [
     'as' => 'social.login',
