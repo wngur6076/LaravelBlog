@@ -28,3 +28,14 @@
     </select>
     {!! $errors->first('tags', '<span class="form-error">:message</span>') !!}
 </div>
+
+@section('script')
+    @parent
+        <script>
+            /* select2 */
+            $('#tags').select2({
+                placeholder: '{{ trans('forum.articles.s2_select') }}',
+                maximumSelectionLength: 3
+            });
+        </script>
+@stop

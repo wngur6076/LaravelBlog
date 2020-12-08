@@ -11,9 +11,13 @@ class ArticlesController extends Controller
         $this->middleware('auth', ['except' => ['index', 'show']]);
     }
 
-    public function index()
+    public function index($slug = null)
     {
-        $articles = \App\Article::latest()->paginate(3);
+        $query = $slug
+            ? \App\Tag::whereSlug($slug)->firstOrFail()->articles()
+            : new \App\Article;
+
+        $articles = $query->paginate(3);
         $articles->load('user');
         // dd(view('articles.index', compact('articles'))->render());
 
@@ -38,7 +42,8 @@ class ArticlesController extends Controller
             return back()->withInput();
         }
         // event(new \App\Events\ArticleEvent($article));
-        
+        $article->tags()->sync($request->input('tags'));
+
         return $this->respondCreated($article);
     }
 
@@ -56,6 +61,7 @@ class ArticlesController extends Controller
     public function update(\App\Http\Requests\ArticlesRequest $request, \App\Article $article)
     {
         $article->update($request->all());
+        $article->tags()->sync($request->input('tags'));
         flash()->success('수정하신 내용을 저장했습니다.');
 
         return redirect(route('articles.show', $article->id));

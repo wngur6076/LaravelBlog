@@ -20,6 +20,13 @@ Route::get('/home', [
     'uses' => 'HomeController@index'
 ]);
 
+/* 태그별 필터링 */
+Route::get('tags/{slug}/articles', [
+    'as' => 'tags.articles.index',
+    'uses' => 'ArticlesController@index'
+]);
+
+
 /* 글쓰기 */
 Route::resource('articles', 'ArticlesController');
 
