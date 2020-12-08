@@ -11,6 +11,9 @@
 
 @import 'node_modules/select2/src/scss/core';
 
+// Dropzone
+@import 'node_modules/dropzone/src/dropzone';
+
 .select2-dropdown,
 .select2-container--default .select2-selection--multiple,
 .select2-container--default.select2-container--focus .select2-selection--multiple {
@@ -22,6 +25,7 @@
 .select2-container--default .select2-selection--multiple {
     font-size: $font-size-base;
 }
+
 
 // Application Layouts
 .container__article {

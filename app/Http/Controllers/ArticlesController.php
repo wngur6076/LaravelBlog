@@ -44,6 +44,12 @@ class ArticlesController extends Controller
         // event(new \App\Events\ArticleEvent($article));
         $article->tags()->sync($request->input('tags'));
 
+        // 첨부파일 연결
+        $request->getAttachments()->each(function ($attachment) use ($article) {
+            $attachment->article()->associate($article);
+            $attachment->save();
+        });
+
         return $this->respondCreated($article);
     }
 

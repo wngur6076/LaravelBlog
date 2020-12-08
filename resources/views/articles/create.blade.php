@@ -4,7 +4,7 @@
 <div class="container">
     <h1>새포럼 글쓰기</h1>
     <hr />
-    <form action="{{ route('articles.store') }}" method="POST">
+    <form id="article-create-form" action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data">
         {!! csrf_field() !!}
 
         @include('articles.partial.form')

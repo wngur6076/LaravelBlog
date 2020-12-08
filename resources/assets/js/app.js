@@ -17,8 +17,4 @@ Vue.component('example', require('./components/Example.vue'));
 
 const app = new Vue({
     el: 'body',
-
-    ready() {
-        hljs.initHighlightingOnLoad();
-    }
 });

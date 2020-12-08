@@ -15,7 +15,7 @@
     <link href="{{ elixir('css/app.css') }}" rel="stylesheet">
 
     @yield('style')
-    
+
     <!-- Scripts -->
     <script>
         window.Laravel = <?php echo json_encode([
