@@ -18,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
                 return \App\Tag::all();
             });
             $view->with(compact('allTags'));
+            $view->with('currentUser', auth()->user());
         });
     }
 

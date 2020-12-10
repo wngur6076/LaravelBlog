@@ -20,6 +20,9 @@ Route::get('/home', [
     'uses' => 'HomeController@index'
 ]);
 
+Route::resource('comments', 'CommentsController', ['only' => ['update', 'destroy']]);
+Route::resource('articles.comments', 'CommentsController', ['only' => 'store']);
+
 /* 태그별 필터링 */
 Route::get('tags/{slug}/articles', [
     'as' => 'tags.articles.index',

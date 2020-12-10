@@ -26,7 +26,7 @@
             @endif
         </div>
         @if ($currentUser)
-            {{-- @include('comments.partial.create', ['parentId' => $comment->id]) --}}
+            @include('comments.partial.create', ['parentId' => $comment->id])
         @endif
 
         @can ('update', $comment)
