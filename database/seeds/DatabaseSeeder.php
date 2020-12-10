@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(UsersTableSeeder::class);
         /* 태그 */
         // App\Tag::truncate();
+
         DB::table('article_tag')->truncate();
         $tags = config('project.tags');
 
@@ -43,5 +44,23 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->command->info('Seeded: article_tag table');
+
+        $articles->each(function ($article) {
+            $article->comments()->save(factory(App\Comment::class)->make());
+            $article->comments()->save(factory(App\Comment::class)->make());
+        });
+
+        $articles->each(function ($article) use ($faker) {
+            $commentIds = App\Comment::pluck('id')->toArray();
+
+            foreach(range(1, 5) as $index) {
+                $article->comments()->save(
+                    factory(App\Comment::class)->make([
+                        'parent_id' => $faker->randomElement($commentIds),
+                    ])
+                );
+            }
+        });
+        $this->command->info('Seeded: comments table');
     }
 }

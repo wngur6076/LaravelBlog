@@ -18,7 +18,6 @@ class ArticlesController extends Controller
             : new \App\Article;
 
         $articles = $query->paginate(3);
-        $articles->load('user');
         // dd(view('articles.index', compact('articles'))->render());
 
         return view('articles.index', compact('articles'));
