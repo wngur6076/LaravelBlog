@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * include Vue and Vue Resource. This gives a great starting point for
@@ -17,4 +16,18 @@ Vue.component('example', require('./components/Example.vue'));
 
 const app = new Vue({
     el: 'body',
+
+    ready() {
+        this.setJqueryAjaxHeaders();
+    },
+
+    methods: {
+        setJqueryAjaxHeaders() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+        },
+    }
 });

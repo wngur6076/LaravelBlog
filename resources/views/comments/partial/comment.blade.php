@@ -16,7 +16,7 @@
             {!! markdown($comment->content) !!}
         </div>
         <div class="action__comment">
-            @can ('update', $comment)
+            @can('update', $comment)
                 <button class="btn__delete__comment">댓글 삭제</button>
                 <button class="btn__edit__comment">댓글 수정</button>
             @endcan
@@ -29,8 +29,8 @@
             @include('comments.partial.create', ['parentId' => $comment->id])
         @endif
 
-        @can ('update', $comment)
-            {{-- @include('comments.partial.edit') --}}
+        @can('update', $comment)
+            @include('comments.partial.edit')
         @endcan
 
         @forelse ($comment->replies as $reply)
