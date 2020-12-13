@@ -21,4 +21,14 @@ class Vote extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function setUpAttribute($value)
+    {
+        $this->attributes['up'] = $value ? 1 : null;
+    }
+
+    public function setDownAttribute($value)
+    {
+        $this->attributes['down'] = $value ? 1 : null;
+    }
 }

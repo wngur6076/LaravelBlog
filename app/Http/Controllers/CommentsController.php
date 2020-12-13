@@ -38,4 +38,31 @@ class CommentsController extends Controller
 
         return redirect()->json([], 204);
     }
+
+    public function vote(Request $request, \App\Comment $comment)
+    {
+        $this->validate($request, [
+            'vote' => 'required|in:up,down',
+        ]);
+
+        if ($comment->votes()->whereUserId($request->user()->id)->exists()) {
+            return response()->json(['error' => 'already_voted'], 409);
+        }
+
+
+        $up = $request->input('vote') == 'up' ? true : false;
+
+        $comment->votes()->create([
+            'user_id'   => $request->user()->id,
+            'up'        => $up,
+            'down'      => ! $up,
+            'voted_at'  => \Carbon\Carbon::now()->toDateTimeString(), 
+        ]);
+
+
+        return response()->json([
+            'voted' => $request->input('vote'),
+            'value' => $comment->votes()->sum($request->input('vote')),
+        ]);
+    }
 }

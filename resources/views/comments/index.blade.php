@@ -42,5 +42,22 @@
             });
         }
     });
+
+    $('.btn__vote__comment').on('click', function (e) {
+        var self = $(this),
+            commentId = self.closest('.item__comment').data('id');
+
+        $.ajax({
+            type: 'POST',
+            url: "/comments/" + commentId + '/votes',
+            data: {
+                vote: self.data('vote')
+            }
+        }).then(function (data) {
+            self.find('span').html(data.value).fadeIn();
+            self.attr('disabled', 'disabled');
+            self.siblings().attr('disabled', 'disabled');
+        });
+    });
 </script>
 @endsection
