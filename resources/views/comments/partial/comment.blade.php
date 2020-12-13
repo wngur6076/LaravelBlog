@@ -29,10 +29,6 @@
             @include('comments.partial.create', ['parentId' => $comment->id])
         @endif
 
-        @can('update', $comment)
-            @include('comments.partial.edit')
-        @endcan
-
         @forelse ($comment->replies as $reply)
             @include('comments.partial.comment', [
                 'comment' => $reply,
