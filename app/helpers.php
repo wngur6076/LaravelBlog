@@ -50,3 +50,33 @@ if (! function_exists('format_filesize')) {
         return round($bytes, 2) . $suffix[$step];
     }
 }
+
+if (! function_exists('link_for_sort')) {
+    function link_for_sort($colum, $text, $params = [])
+    {
+        $direction = request()->input('order');
+        $reverse = ($direction == 'asc') ? 'desc' : 'asc';
+
+        if (request()->input('sort') == $colum) {
+            $text = sprintf("%s %s",
+                $direction == 'asc'
+                    ? '<i class="fa fa-sort-alpha-asc"></i>'
+                    : '<i class="fa fa-sort-alpha-desc"></i>',
+                $text
+            );
+        }
+
+        $queryString = http_build_query(array_merge(
+            request()->except(['sort', 'order']),
+            ['sort' => $colum, 'order' => $reverse],
+            $params
+        ));
+
+        return sprintf(
+            '<a href="%s?%s">%s</a>',
+            urldecode(request()->url()),
+            $queryString,
+            $text
+        );
+    }
+}
