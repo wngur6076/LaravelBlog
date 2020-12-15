@@ -11,11 +11,21 @@ class ArticlesController extends Controller
         $this->middleware('auth', ['except' => ['index', 'show']]);
     }
 
-    public function index($slug = null)
+    public function index(Request $request, $slug = null)
     {
         $query = $slug
             ? \App\Tag::whereSlug($slug)->firstOrFail()->articles()
             : new \App\Article;
+
+        $query = $query->orderBy(
+            $request->input('sort', 'created_at'),
+            $request->input('order', 'desc')
+        );
+
+        if ($keyword = $request->input('q')) {
+            $raw = 'MATCH(title,content) AGAINST(? IN BOLLEAN MODE)';
+            $query = $query->whereRaw($raw, [$keyword]);
+        }
 
         $articles = $query->paginate(3);
         // dd(view('articles.index', compact('articles'))->render());
@@ -32,7 +42,11 @@ class ArticlesController extends Controller
 
     public function store(\App\Http\Requests\ArticlesRequest $request)
     {
-        $article = $request->user()->articles()->create($request->all());
+        $payload = array_merge($request->all(), [
+            'notification' => $request->has('notification'),
+        ]);
+
+        $article = $request->user()->articles()->create($payload);
         if (! $article) {
             flash()->error(
                 trans('글이 저장되지 않았습니다.')
@@ -54,6 +68,9 @@ class ArticlesController extends Controller
 
     public function show(\App\Article $article)
     {
+        $article->view_count += 1;
+        $article->save();
+
         $comments = $article->comments()->with('replies')->whereNull('parent_id')
         ->latest()->get();
 
@@ -68,7 +85,11 @@ class ArticlesController extends Controller
 
     public function update(\App\Http\Requests\ArticlesRequest $request, \App\Article $article)
     {
-        $article->update($request->all());
+        $payload = array_merge($request->all(), [
+            'notification' => $request->has('notification'),
+        ]);
+
+        $article->update($payload);
         $article->tags()->sync($request->input('tags'));
         flash()->success('수정하신 내용을 저장했습니다.');
 

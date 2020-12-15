@@ -22,6 +22,9 @@ class EventServiceProvider extends ServiceProvider
         \Illuminate\Auth\Events\Login::class => [
             \App\Listeners\UsersEventListener::class
         ],
+        \App\Events\CommentsEvent::class => [
+            \App\Listeners\CommentsEventListener::class
+        ],
     ];
 
     /**
