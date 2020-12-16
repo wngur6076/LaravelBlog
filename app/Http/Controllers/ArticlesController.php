@@ -13,6 +13,8 @@ class ArticlesController extends Controller
 
     public function index(Request $request, $slug = null)
     {
+        $cacheKey = cache_key('articles.index');
+
         $query = $slug
             ? \App\Tag::whereSlug($slug)->firstOrFail()->articles()
             : new \App\Article;
@@ -27,7 +29,8 @@ class ArticlesController extends Controller
             $query = $query->whereRaw($raw, [$keyword]);
         }
 
-        $articles = $query->paginate(3);
+        $articles = $this->cache($cacheKey, 5, $query, 'paginate', 3);
+        // $articles = $query->paginate(3);
         // dd(view('articles.index', compact('articles'))->render());
 
         return view('articles.index', compact('articles'));
@@ -71,8 +74,8 @@ class ArticlesController extends Controller
         $article->view_count += 1;
         $article->save();
 
-        $comments = $article->comments()->with('replies')->whereNull('parent_id')
-        ->latest()->get();
+        $comments = $article->comments()->with('replies')->withTrashed()
+            ->whereNull('parent_id')->latest()->get();
 
         return view('articles.show', compact('article', 'comments'));
     }

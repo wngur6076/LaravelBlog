@@ -80,3 +80,14 @@ if (! function_exists('link_for_sort')) {
         );
     }
 }
+
+if (! function_exists('cache_key')) {
+    function cache_key($base)
+    {
+        $key = ($url = request()->getQueryString())
+            ? $base.'.'.urlencode($url)
+            : $base;
+
+        return md5($key);
+    }
+}

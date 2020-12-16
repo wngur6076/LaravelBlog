@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
+    use \Illuminate\Database\Eloquent\SoftDeletes;
+
+    protected $dates = ['deleted_at'];
+
     protected $fillable = ['commentable_type', 'commentable_id', 'user_id', 
     'parent_id', 'content'];
 
