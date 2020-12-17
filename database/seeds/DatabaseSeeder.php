@@ -16,14 +16,14 @@ class DatabaseSeeder extends Seeder
         // App\Tag::truncate();
 
         // DB::table('article_tag')->truncate();
-        // $tags = config('project.tags');
+        $tags = config('project.tags');
 
-        // foreach($tags as $slug => $name) {
-        //     App\Tag::create([
-        //         'name' => $name,
-        //         'slug' => str_slug($slug)
-        //     ]);
-        // }
+        foreach($tags as $slug => $name) {
+            App\Tag::create([
+                'name' => $name,
+                'slug' => str_slug($slug)
+            ]);
+        }
 
         // $this->command->info('Seeded: tags table');
 
@@ -73,21 +73,21 @@ class DatabaseSeeder extends Seeder
 
         // $this->command->info('Seeded: votes table');
 
-        foreach(range(1, 10) as $index) {
-            // 테스트를 위해 고아가 된 첨부파일을 만든다.
-            // 고아가 된 첨부파일 이란 article_id가 없고 생성된 지 일주일 넘은 테이블 레코드/파일를 의미한다.
-            $path = $faker->image(attachments_path());
-            $filename = File::basename($path);
-            $bytes = File::size($path);
-            $mime = File::mimeType($path);
-            $this->command->warn("File saved: {$filename}");
+        // foreach(range(1, 10) as $index) {
+        //     // 테스트를 위해 고아가 된 첨부파일을 만든다.
+        //     // 고아가 된 첨부파일 이란 article_id가 없고 생성된 지 일주일 넘은 테이블 레코드/파일를 의미한다.
+        //     $path = $faker->image(attachments_path());
+        //     $filename = File::basename($path);
+        //     $bytes = File::size($path);
+        //     $mime = File::mimeType($path);
+        //     $this->command->warn("File saved: {$filename}");
 
-            factory(App\Attachment::class)->create([
-                'filename' => $filename,
-                'bytes' => $bytes,
-                'mime' => $mime,
-                'created_at' => $faker->dateTimeBetween('-1 months'),
-            ]);
-        }
+        //     factory(App\Attachment::class)->create([
+        //         'filename' => $filename,
+        //         'bytes' => $bytes,
+        //         'mime' => $mime,
+        //         'created_at' => $faker->dateTimeBetween('-1 months'),
+        //     ]);
+        // }
     }
 }

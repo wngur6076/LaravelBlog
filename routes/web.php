@@ -25,6 +25,12 @@ Route::post('comments/{comment}/votes', [
     'uses' => 'CommentsController@vote'
 ]);
 
+Route::get('locale', [
+    'as' => 'locale',
+    'uses' => 'WelcomeController@locale'
+]);
+
+
 Route::resource('comments', 'CommentsController', ['only' => ['update', 'destroy']]);
 Route::resource('articles.comments', 'CommentsController', ['only' => 'store']);
 

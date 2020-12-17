@@ -25,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\CommentsEvent::class => [
             \App\Listeners\CommentsEventListener::class
         ],
+        \App\Events\ModelChanged::class => [
+            \App\Listeners\CacheHandler::class
+        ],
     ];
 
     /**

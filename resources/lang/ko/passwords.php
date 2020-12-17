@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'password' => 'Passwords must be at least six characters and match the confirmation.',
-    'reset' => 'Your password has been reset!',
-    'sent' => 'We have e-mailed your password reset link!',
-    'token' => 'This password reset token is invalid.',
-    'user' => "We can't find a user with that e-mail address.",
+    'password' => '6글자 이상의 비밀번호를 사용하세요.',
+    'reset' => '비밀번호를 초기화했습니다.',
+    'sent' => '비밀번호를 초기화하는 방법을 담은 이메일을 발송했습니다.',
+    'token' => '잘못된 URL 요청입니다. 이메일로 받은 주소를 정확히 입력해 주세요.',
+    'user' => '이메일 주소를 다시 확인해 주세요.',
 
 ];

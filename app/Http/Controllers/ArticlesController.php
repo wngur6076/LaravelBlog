@@ -4,16 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ArticlesController extends Controller
+class ArticlesController extends Controller implements Cacheable
 {
     public function __construct()
     {
+        parent::__construct();
         $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+
+    public function cacheTags()
+    {
+        return 'articles';
     }
 
     public function index(Request $request, $slug = null)
     {
-        $cacheKey = cache_key('articles.index');
+        $cacheKey = cache_key($request->url());
 
         $query = $slug
             ? \App\Tag::whereSlug($slug)->firstOrFail()->articles()
@@ -25,7 +31,7 @@ class ArticlesController extends Controller
         );
 
         if ($keyword = $request->input('q')) {
-            $raw = 'MATCH(title,content) AGAINST(? IN BOLLEAN MODE)';
+            $raw = 'MATCH(title,content) AGAINST(? IN BOOLEAN MODE)';
             $query = $query->whereRaw($raw, [$keyword]);
         }
 
@@ -65,6 +71,8 @@ class ArticlesController extends Controller
             $attachment->article()->associate($article);
             $attachment->save();
         });
+
+        event(new \App\Events\ModelChanged(['articles']));
 
         return $this->respondCreated($article);
     }

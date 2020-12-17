@@ -10,6 +10,18 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    
+    protected $cache;
+
+    public function __construct()
+    {
+        $this->cache = app('cache');
+
+        if ((new \ReflectionClass($this))->implementsInterface(Cacheable::class) and
+        taggable()) {
+            $this->cache = app('cache')->tags($this->cacheTags());
+        }
+    }
 
 
     protected function cache($key, $minutes, $query, $method, ...$args)
@@ -20,7 +32,7 @@ class Controller extends BaseController
             return $query->{$method}($args);
         }
 
-        return \Cache::remember($key, $minutes, function () use($query, $method,
+        return $this->cache->remember($key, $minutes, function () use($query, $method,
         $args) {
             return $query->{$method}($args);
         });

@@ -85,9 +85,16 @@ if (! function_exists('cache_key')) {
     function cache_key($base)
     {
         $key = ($url = request()->getQueryString())
-            ? $base.'.'.urlencode($url)
+            ? $base . '.' . urlencode($url)
             : $base;
 
         return md5($key);
+    }
+}
+
+if (! function_exists('taggable')) {
+    function taggable()
+    {
+        return in_array(config('cache.default'), ['memcached', 'redis'], true);
     }
 }

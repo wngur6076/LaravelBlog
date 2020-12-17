@@ -26,5 +26,10 @@ return [
         'created_at' => '작성일',
     ],
 
-    'cache' => false,
+    'cache' => true,
+
+    'locales' => [
+        'ko' => '한국어',
+        'en' => 'English',
+    ],
 ];
