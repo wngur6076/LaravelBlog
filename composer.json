@@ -11,7 +11,8 @@
         "guzzlehttp/guzzle": "~5.3|~6.0",
         "doctrine/dbal": "^2.0",
         "laravel/socialite": "2.0.22",
-        "erusev/parsedown-extra": " ~0.7.1"
+        "erusev/parsedown-extra": " ~0.7.1",
+        "maknz/slack": "1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

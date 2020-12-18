@@ -36,7 +36,8 @@ class SessionsController extends Controller
 
         flash(auth()->user()->name . '님, 환영합니다.');
 
-        return redirect()->intended('home');
+        return ($return = request('return'))
+            ? redirect(urldecode($return)) : redirect()->intended('home');
     }
 
     public function destroy()

@@ -28,7 +28,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 @if(Auth::guest())
-                    <li><a href="{{ route('sessions.create') }}">Login</a></li>
+                    <li><a href="{{ route('sessions.create', ['return' => urlencode($currentUrl)]) }}">Login</a></li>
                     <li><a href="{{ route('users.create') }}">Register</a></li>
                 @else
                     <li class="dropdown">

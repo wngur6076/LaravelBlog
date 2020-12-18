@@ -4,6 +4,10 @@
 <form action="{{ route('sessions.store') }}" method="POST" class="form__auth">
     {!! csrf_field() !!}
 
+    @if ($return = request('return'))
+        <input type="hidden" name="return" value="{{ $return }}">
+    @endif
+
     <div class="page-header" style="text-align: center">
         <h4>로그인</h4>
         <p class="text-muted">
