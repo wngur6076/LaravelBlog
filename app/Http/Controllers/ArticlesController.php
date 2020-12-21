@@ -39,6 +39,11 @@ class ArticlesController extends Controller implements Cacheable
         // $articles = $query->paginate(3);
         // dd(view('articles.index', compact('articles'))->render());
 
+        return $this->respondCollection($articles);
+    }
+
+    protected function respondCollection(\Illuminate\Contracts\Pagination\LengthAwarePaginator $articles)
+    {
         return view('articles.index', compact('articles'));
     }
 
@@ -54,8 +59,9 @@ class ArticlesController extends Controller implements Cacheable
         $payload = array_merge($request->all(), [
             'notification' => $request->has('notification'),
         ]);
-
-        $article = $request->user()->articles()->create($payload);
+            
+        // $article = $request->user()->articles()->create($payload);
+        $article = \App\User::find(1)->articles()->create($payload);
         if (! $article) {
             flash()->error(
                 trans('글이 저장되지 않았습니다.')
@@ -116,7 +122,7 @@ class ArticlesController extends Controller implements Cacheable
         return response()->json([], 204);
     }
 
-    protected function respondCreated($article)
+    protected function respondCreated(\App\Article $article)
     {
         flash()->success(
             trans('작성하신 글이 저장되었습니다.')

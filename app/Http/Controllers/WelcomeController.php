@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class WelcomeController extends Controller
 {
+    public function index()
+    {
+        return view('welcome');
+    }
+
     public function locale()
     {
         $cookie = cookie()->forever('locale__myapp', request('locale'));

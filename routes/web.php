@@ -11,9 +11,15 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [
+    'as' => 'index',
+    'uses' => 'WelcomeController@index'
+]);
+
+Route::get('locale', [
+    'as' => 'locale',
+    'uses' => 'WelcomeController@locale'
+]);
 
 Route::get('/home', [
     'as' => 'home',
@@ -24,12 +30,6 @@ Route::post('comments/{comment}/votes', [
     'as' => 'comments.vote',
     'uses' => 'CommentsController@vote'
 ]);
-
-Route::get('locale', [
-    'as' => 'locale',
-    'uses' => 'WelcomeController@locale'
-]);
-
 
 Route::resource('comments', 'CommentsController', ['only' => ['update', 'destroy']]);
 Route::resource('articles.comments', 'CommentsController', ['only' => 'store']);
