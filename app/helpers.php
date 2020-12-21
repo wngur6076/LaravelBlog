@@ -128,3 +128,17 @@ if (! function_exists('array_transpose')) {
         return $res;
     }
 }
+
+if (! function_exists('jwt')) {
+    function jwt() 
+    {
+        return app('tymon.jwt.auth');
+    }
+}
+
+if (! function_exists('is_api_domain')) {
+    function is_api_domain()
+    {
+        return starts_with(request()->getHttpHost(), config('project.api_domain'));
+    }
+}

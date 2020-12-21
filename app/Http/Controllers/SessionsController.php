@@ -23,8 +23,12 @@ class SessionsController extends Controller
             'password' => 'required|min:6'
         ]);
 
-        if (! auth()->attempt($request->only('email', 'password'), 
-        $request->has('remember'))) {
+        $token = is_api_domain()
+            ? jwt()->attempt($request->only('email', 'password'))
+            : auth()->attempt($request->only('email', 'password'),
+            $request->has('remember'));
+
+        if (! $token) {
             return $this->respondError('이메일 또는 비밀번호가 맞지 않습니다.');
         }
 
@@ -34,6 +38,13 @@ class SessionsController extends Controller
             return $this->respondError('가입 확인해 주세요.');
         }
 
+        flash(auth()->user()->name . '님, 환영합니다.');
+
+        return $this->respondCreated($token);
+    }
+
+    protected function respondCreated($token)
+    {
         flash(auth()->user()->name . '님, 환영합니다.');
 
         return ($return = request('return'))

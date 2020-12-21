@@ -12,7 +12,8 @@
         "doctrine/dbal": "^2.0",
         "laravel/socialite": "2.0.22",
         "erusev/parsedown-extra": " ~0.7.1",
-        "maknz/slack": "1.*"
+        "maknz/slack": "1.*",
+        "tymon/jwt-auth": " 0.5.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
