@@ -59,4 +59,30 @@ Route::group(['domain' => config('project.api_domain'), 'namespace' => 'Api', 'a
             'uses' => 'CommentsController@vote'
         ]);
     });
+
+    /**
+     * 소셜 로그인
+     *
+     * 소셜로그인은 클라이언트 측에서한다.
+     * 클라이언트에서 소셜사용자가 확인되면 서버에 소셜사용자 정보를 던진다.
+     * 서버는 받은 사용자 객체로 로그인인다. 없으면 만든다.
+     * 로그인하면 서버는 클라이언트에게 토큰을 발급한다.
+     */
+    Route::post('social/{provider}', [
+        'as' => 'social.login',
+        'uses' => 'SocialController@store',
+    ]);
+
+    /**
+     * 비밀번호 초기화
+     *
+     * 클라이언트가 비밀번호 바꾸기 요청을 하면 서버는 비밀번호 바꾸는 방법을 담은 메일을 보낸다.
+     * 사용자가 메일에서 링크를 클릭하면 웹브라우저가 작동하고, 그 이후 모든 과정은 웹에서 이루어 진다.
+     * 바꾼 비밀번호는 서버에 저장되어 있고, 다음번 클라이언트에서 바꾼 비밀번호로
+     * 로그인을 시도하면 유효한 토큰을 발급 받을 수 있다.
+     */
+    Route::post('auth/remind', [
+        'as' => 'remind.store',
+        'uses' => 'PasswordsController@postRemind',
+    ]);
 });

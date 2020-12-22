@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use \App\Article;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 
 class ArticlesController extends Controller implements Cacheable
 {
@@ -91,7 +93,7 @@ class ArticlesController extends Controller implements Cacheable
         $comments = $article->comments()->with('replies')->withTrashed()
             ->whereNull('parent_id')->latest()->get();
 
-        return view('articles.show', compact('article', 'comments'));
+        return $this->respondInstance($article, $comments);
     }
 
     public function edit(\App\Article $article)
@@ -108,12 +110,11 @@ class ArticlesController extends Controller implements Cacheable
 
         $article->update($payload);
         $article->tags()->sync($request->input('tags'));
-        flash()->success('수정하신 내용을 저장했습니다.');
 
-        return redirect(route('articles.show', $article->id));
+        return $this->respondUpdated($article);
     }
     
-    public function destroy(\App\Article $article)
+    public function destroy(Article $article)
     {
         $this->authorize('delete', $article);
 
@@ -122,12 +123,24 @@ class ArticlesController extends Controller implements Cacheable
         return response()->json([], 204);
     }
 
-    protected function respondCreated(\App\Article $article)
+    protected function respondCreated(Article $article)
     {
         flash()->success(
             trans('작성하신 글이 저장되었습니다.')
         );
 
         return redirect(route('articles.show', $article->id));
+    }
+
+    protected function respondUpdated(\App\Article $article)
+    {
+        flash()->success('수정하신 내용을 저장했습니다.');
+
+        return redirect(route('articles.show', $article->id));
+    }
+
+    protected function respondInstance(Article $article, Collection $comments)
+    {
+        return view('articles.show', compact('article', 'comments'));
     }
 }

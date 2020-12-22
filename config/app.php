@@ -183,6 +183,7 @@ return [
         Laravel\Socialite\SocialiteServiceProvider::class,
 
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        Appkr\Api\ApiServiceProvider::class,
     ],
 
     /*
