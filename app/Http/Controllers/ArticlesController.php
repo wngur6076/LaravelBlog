@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use \App\Article;
+use App\Article;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ArticlesController extends Controller implements Cacheable
 {
@@ -41,10 +42,10 @@ class ArticlesController extends Controller implements Cacheable
         // $articles = $query->paginate(3);
         // dd(view('articles.index', compact('articles'))->render());
 
-        return $this->respondCollection($articles);
+        return $this->respondCollection($articles, $cacheKey);
     }
 
-    protected function respondCollection(\Illuminate\Contracts\Pagination\LengthAwarePaginator $articles)
+    protected function respondCollection(LengthAwarePaginator $articles, $cacheKey = null)
     {
         return view('articles.index', compact('articles'));
     }
@@ -87,8 +88,10 @@ class ArticlesController extends Controller implements Cacheable
 
     public function show(\App\Article $article)
     {
-        $article->view_count += 1;
-        $article->save();
+        if (! is_api_domain()) {
+            $article->view_count += 1;
+            $article->save();
+        }
 
         $comments = $article->comments()->with('replies')->withTrashed()
             ->whereNull('parent_id')->latest()->get();

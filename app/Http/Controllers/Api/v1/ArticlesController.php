@@ -6,9 +6,12 @@ use App\Http\Controllers\ArticlesController as ParentController;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use App\Article;
+use App\Http\Controllers\Cacheable;
 
-class ArticlesController extends ParentController
+class ArticlesController extends ParentController implements Cacheable
 {
+    use \App\EtagTrait;
+
     public function __construct()
     {
         parent::__construct();
@@ -17,18 +20,35 @@ class ArticlesController extends ParentController
         $this->middleware('jwt.auth', ['except' => ['index', 'show', 'tags']]);
     }
 
-    protected function respondCollection(LengthAwarePaginator $artlcles)
+    protected function respondCollection(LengthAwarePaginator $articles, $cacheKey = null)
     {
+        $reqEtag = request()->getETags();
+        $genEtag = $this->etags($articles, $cacheKey);
+
+        if (config('project.etag') and isset($reqEtag[0]) and $reqEtag[0] === 
+        $genEtag) {
+            return json()->notModified();
+        }
+
         // return $article->toJson(JSON_PRETTY_PRINT);
-        return json()->withPagination(
-            $artlcles,
+        return json()->setHeaders(['Etag' => $genEtag])->withPagination(
+            $articles,
             new \App\Transformers\ArticleTransformer
         );
     }
 
     protected function respondInstance(Article $article, Collection $comments)
     {
-        return json()->withItem(
+        $cacheKey = cache_key('articles.' . $article->id);
+        $reqEtag = request()->getETags();
+        $genEtag = $this->etag($article, $cacheKey);
+
+        if (config('project.etag') and isset($reqEtag[0]) and $reqEtag[0] === 
+        $genEtag) {
+            return json()->notModified();
+        }
+
+        return json()->setHeaders(['Etag' => $genEtag])->withItem(
             $article,
             new \App\Transformers\ArticleTransformer
         );
