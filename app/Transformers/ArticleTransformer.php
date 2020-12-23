@@ -36,8 +36,9 @@ class ArticleTransformer extends TransformerAbstract
      */
     public function transform(Article $article)
     {
+        $obfuscatedId = optimus($article->id);
         $payload = [
-            'id' => (int) $article->id,
+            'id' => $obfuscatedId,
             'title' => $article->title,
             'content' => $article->content,
             'content_html' => markdown($article->content),
@@ -54,7 +55,7 @@ class ArticleTransformer extends TransformerAbstract
             'links' => [
                 [
                     'rel' => 'self',
-                    'href' => route('api.v1.articles.show', $article->id),
+                    'href' => route('api.v1.articles.show', $obfuscatedId),
                 ],
                 [
                     'rel' => 'api.v1.articles.attachments.index',

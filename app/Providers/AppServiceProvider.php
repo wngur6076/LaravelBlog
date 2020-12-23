@@ -37,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton('optimus', function() {
+            return new \Jenssegers\Optimus\Optimus(628694821, 1408623789, 1836317030);
+        });
     }
 }

@@ -142,3 +142,16 @@ if (! function_exists('is_api_domain')) {
         return starts_with(request()->getHttpHost(), config('project.api_domain'));
     }
 }
+
+if (! function_exists('optimus')) {
+    function optimus($id = null)
+    {
+        $factory = app('optimus');
+
+        if (func_num_args() === 0) {
+            return $factory;
+        }
+
+        return $factory->encode($id);
+    }
+}

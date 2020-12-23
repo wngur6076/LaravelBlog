@@ -42,6 +42,11 @@ class User extends Authenticatable
         return ($this->id === 1) ? true : false;
     }
 
+    public function isSocialUser()
+    {
+        return is_null($this->password) && $this->activated;
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
@@ -50,5 +55,10 @@ class User extends Authenticatable
     public function votes()
     {
         return $this->hasMany(Vote::class);
+    }
+
+    public function scopeSocialUser(\Illuminate\Database\Eloquent\Builder $query, $email)
+    {
+        return $query->whereEmail($email)->whereNull('password')->whereActivated(1);
     }
 }

@@ -18,7 +18,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:api');
 
 Route::group(['domain' => config('project.api_domain'), 'namespace' => 'Api', 'as'
-=> 'api.'], function () {
+=> 'api.', 'middleware' => 'cors'], function () {
     // 인증 관련 라우트
     Route::post('auth/login', [
         'as' => 'sessions.store',
@@ -32,7 +32,7 @@ Route::group(['domain' => config('project.api_domain'), 'namespace' => 'Api', 'a
         },
     ]);
 
-    Route::group(['prefix' => 'v1', 'namespace' => 'v1', 'as' => 'v1.'], function () {
+    Route::group(['prefix' => 'v1', 'namespace' => 'v1', 'as' => 'v1.', 'middleware' => 'throttle:60,1'], function () {
         /* 환영 메시지 */
         Route::get('/', [
             'as' => 'index',
